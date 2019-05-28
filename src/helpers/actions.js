@@ -18,7 +18,6 @@ export const createActions = ({editor, helper, store, raw, modal, colorPicker}) 
             helper[`${command}Modal`] = true;
             modal.$on('colorHref', (item) => {
               restoreRange(editor);
-              console.log(item);
               exec(command, item.detail.color);
             });
           }
@@ -151,7 +150,6 @@ export const createActions = ({editor, helper, store, raw, modal, colorPicker}) 
       icon: linkSvg,
       title: 'Insert link',
       result: function(state) {
-          console.log(this);
           const actionObj = state.actionObj;
           if (actionObj.a.active) {
             const selection = window.getSelection();

@@ -10,12 +10,14 @@
     removeBadTags,
     isEditorClick
   } from './helpers/util';
+
   import EditorModal from "./helpers/EditorModal.svelte";
   import EditorColorPicker from "./helpers/EditorColorPicker.svelte";
   import {onMount} from 'svelte';
   import {createActions} from './helpers/actions';
   import { writable, get } from 'svelte/store';
   import { createEventDispatcher } from 'svelte';
+
   const dispatchEvent = createEventDispatcher();
 
   const content = writable({});
@@ -34,7 +36,7 @@
   export let html = '';
   export let removeFormatTags =  ['h1', 'h2', 'blockquote'];
   const actionObj = {};
-  
+
   onMount(()=> {
     const _data = {actionBtns, height, html, removeFormatTags};
     Object.assign(helper, {
@@ -51,8 +53,7 @@
     const colorPickerEl = new EditorColorPicker({ target: colorPicker });
     const actions = createActions({helper, store: content, raw, editor, colorPicker: colorPickerEl, modal: modalEl});
     Object.assign(actionObj, getNewActionObj(actions, _data.actions));
-    console.log(this)
-    editor.set({ actionBtns: getActionBtns(actionObj), actionObj });
+    content.set({ actionBtns: getActionBtns(actionObj), actionObj });
     methods.setHtml(_data.html);
     content.subscribe(state =>{
         actionBtns = state.actionBtns;
@@ -60,7 +61,6 @@
     });
 });
 
-    const _this = this;
     const methods = {
       _btnClicked: function(action) {
         editor.focus();
@@ -175,6 +175,7 @@
 
 
 <svelte:window on:click={methods._documentClick}/>
+
 <div class="cl" bind:this={editorWrapper}>
   <div class="cl-actionbar">
     {#each actionBtns as action }
@@ -201,4 +202,3 @@
   <div bind:this={modal}></div>
   <div bind:this={colorPicker}></div>
 </div>
-<svelte:options tag="editor-svelte"  accessors={true}/>

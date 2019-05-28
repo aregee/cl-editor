@@ -1,5 +1,6 @@
 
 let t  =  {};
+
 // @params: command=string, value=null
 export const exec = (command, value = null) => {
   document.execCommand(command, false, value)
@@ -52,7 +53,6 @@ export const saveRange = (editor) => {
 }
 // @params editor: HTMLElement
 export const restoreRange = (editor) => {
-  debugger;
   let metaRange = t.metaRange;
   let savedRange = t.range;
   let documentSelection = document.getSelection();

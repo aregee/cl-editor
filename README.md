@@ -1,68 +1,117 @@
-*Psst — looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+## Lightweight text editor
+Port of [@nenadpnc/cl-editor](https://github.com/nenadpnc/cl-editor) from svelte v2 to svelte v3 (no external dependencies) 
 
----
+<b>Experimental Project for learnng svelte</b>
 
-# svelte app
+#### File size (bundle includes css, html and js)
+* min: 22.5kb
+* gzip: 9kb
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+## Installation
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+#### npm:
 
 ```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
+npm install --save inno-editor
 ```
 
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
+#### HTML:
 
-
-## Get started
-
-Install the dependencies...
-
-```bash
-cd svelte-app
-npm install
+```html
+<head>
+  ...
+</head>
+<body>
+  ...
+  <div id="editor"></div>
+  ...
+</body>
 ```
 
-...then start [Rollup](https://rollupjs.org):
+#### Usage
+```js
+import Editor from 'inno-editor';
+// or
+const Editor = require('inno-editor');
+```
+```js
+// Initialize editor
+const editor = new Editor({
+    // <HTMLElement> required
+    target: document.getElementById('editor'),
+    // optional
+    data: {
+        // <Array[string | Object]> string if overwriting, object if customizing/creating
+        // available actions:
+        // 'viewHtml', 'undo', 'redo', 'b', 'i', 'u', 'strike', 'sup', 'sub', 'h1', 'h2', 'p', 'blockquote', 
+        // 'ol', 'ul', 'hr', 'left', 'right', 'center', 'justify', 'a', 'image', 'forecolor', 'backcolor', 'removeFormat'
+        actions: [
+            'b', 'i', 'u', 'strike', 'ul', 'ol',
+            {
+                name: 'copy', // required
+                icon: '<b>C</b>', // string or html string (ex. <svg>...</svg>)
+                title: 'Copy',
+                result: () => {
+                    // copy current selection or whole editor content
+                    const selection = window.getSelection();
+                    if (!selection.toString().length) {
+                        const range = document.createRange();
+                        range.selectNodeContents(editor.refs.editor);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+                    editor.exec('copy');
+                }
+            },
+            'h1', 'h2', 'p'
+        ],
+        // default 300px
+        height: '300px',
+        // initial html
+        html: '',
+        // remove format action clears formatting, but also removes some html tags.
+        // you can specify which tags you want to be removed.
+        removeFormatTags: ['h1', 'h2', 'blackquote'] // default
+    }
+})
+```
 
+#### API
+```js
+// Methods
+editor.exec(cmd: string, value?: string) // execute document command (document.executeCommand(cmd, false, value))
+editor.getHtml(sanitize?: boolean) // returns html string from editor. if passed true as argument, html will be sanitized before return
+editor.getText() // returns text string from editor
+editor.setHtml(html: string, sanitize?: boolean) // sets html for editor. if second argument is true, html will be sanitized
+editor.saveRange() // saves current editor cursor position or user selection
+editor.restoreRange() // restores cursor position or user selection
+// saveRange and restoreRange are useful when making custom actions
+// that demands that focus is shifted from editor to, for example, modal window.
+```
+
+* You can check them out at [https://svelte.dev](https://svelte.dev)
+* For list of available _**exec**_ command visit [https://codepen.io/netsi1964/pen/QbLLG](https://codepen.io/netsi1964/pen/QbLLGW)
+```js
+// Events
+editor.on('change', (html) => console.log(html)) // on every keyup event
+editor.on('blur', (event) => console.log(event)) // on editor blur event
+```
+```js
+// Props
+editor.refs.<editor | raw | modal | colorPicker> // references to editor, raw (textarea), modal and colorPicker HTMLElements
+editor.options // current editor options
+```
+
+#### Run demo
 ```bash
+git clone https://github.com/aregee/cl-text-editor.git cl-editor
+cd cl-editor
+npm i
 npm run dev
 ```
 
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
+#### This library is inspired by https://github.com/Alex-D/Trumbowyg and https://github.com/jaredreich/pell and  https://github.com/nenadpnc/cl-editor
 
+## Licence
 
-## Deploying to the web
-
-### With [now](https://zeit.co/now)
-
-Install `now` if you haven't already:
-
-```bash
-npm install -g now
-```
-
-Then, from within your project folder:
-
-```bash
-now
-```
-
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public
-```
+ MIT License
