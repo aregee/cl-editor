@@ -1,5 +1,5 @@
 ## Lightweight text editor
-Port of [@nenadpnc/cl-editor](https://github.com/nenadpnc/cl-editor) from svelte v2 to svelte v3 (no external dependencies) 
+Port of [@nenadpnc/cl-editor](https://github.com/nenadpnc/cl-editor) from svelte v2 to svelte v3 (no external dependencies) check live demo [here](https://aregee.github.io/cl-editor/public/)
 
 <b>Experimental Project for learnng svelte</b>
 
@@ -109,8 +109,6 @@ cd cl-editor
 npm i
 npm run dev
 ```
-
-#### This library is inspired by https://github.com/Alex-D/Trumbowyg and https://github.com/jaredreich/pell and  https://github.com/nenadpnc/cl-editor
 
 ## Licence
 
